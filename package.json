@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Easybuoy/aku-backend/issues"
   },
-  "homepage": "https://github.com/Easybuoy/aku-backend#readme"
+  "homepage": "https://github.com/Easybuoy/aku-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
