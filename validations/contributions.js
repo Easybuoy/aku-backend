@@ -10,6 +10,9 @@ const validateContributeInput = (input) => {
   if (Validator.isEmpty(data.amount)) {
     errors.amount = "amount field is required";
   }
+  if (!Validator.isFloat(data.amount)) {
+    errors.amount = "amount must be a float";
+  }
 
   return {
     errors,

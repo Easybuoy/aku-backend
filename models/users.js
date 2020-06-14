@@ -1,6 +1,29 @@
 const db = require("../config/db/db");
 
-const insert = (userData) => db("users").insert(userData).returning("*");
+const insert = async (userData) => {
+  // db("users").insert(userData).returning("*");
+  return db.transaction((trx) => {
+    let userResponseData = null;
+    return db("users")
+      .insert(userData)
+      .returning("*")
+      .transacting(trx)
+      .then((data) => {
+        userResponseData = data;
+
+        return db("accounts")
+          .insert({ user_id: data[0].id, total_contributions: 0 })
+          .returning("*")
+          .transacting(trx);
+      })
+      .then((res) => {
+        console.log(res);
+        return { userData: userResponseData[0], accountData: res[0] };
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  });
+};
 
 const getByUsername = (username) => db("users").where({ username }).first();
 

@@ -1,6 +1,7 @@
 const BaseController = require("./base");
 const { insert, getByEmail, addUserAssociation } = require("../models/users");
 const { getAssociationById } = require("../models/associations");
+const { createAccount } = require("../models/accounts");
 const { hashPassword, verifyPassword, generateToken } = require("../utils");
 class Drivers extends BaseController {
   /**
@@ -53,6 +54,12 @@ class Drivers extends BaseController {
     try {
       const { email, password, name } = req.body;
 
+      const existingUser = await getByEmail(email);
+
+      if (existingUser) {
+        return super.error(res, 400, "Email already exists");
+      }
+
       const hashedPassword = hashPassword(password);
       const userData = {
         email,
@@ -61,14 +68,14 @@ class Drivers extends BaseController {
       };
 
       const newUser = await insert(userData);
-
-      if (newUser.length > 0) {
+      console.log(newUser, "newuser");
+      if (newUser) {
         const userResponse = {
-          email: newUser[0].email,
-          name: newUser[0].name,
-          id: newUser[0].id,
+          userId: newUser.userData.id,
+          name: newUser.userData.name,
+          email: newUser.userData.email,
+          accoundId: newUser.accountData.id,
         };
-
         return super.success(
           res,
           201,
@@ -76,7 +83,9 @@ class Drivers extends BaseController {
           userResponse
         );
       }
+      throw new Error("Unable to register driver");
     } catch (error) {
+      console.log(error);
       return super.error(res, 500, "Unable to register driver");
     }
   }
