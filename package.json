@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app",
     "dev": "nodemon app",
-    "migrate": "knex migrate:latest",
+    "migrate": "yarn unmigrate && knex migrate:latest",
     "unmigrate": "knex migrate:rollback",
     "seed": "knex seed:run"
   },

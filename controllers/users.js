@@ -1,6 +1,6 @@
 const BaseController = require("./base");
-
-const { insert } = require("../models/users");
+const { insert, getByEmail } = require("../models/users");
+const { hashPassword, verifyPassword, generateToken } = require("../utils");
 class Drivers extends BaseController {
   /**
    * Login Route
@@ -13,11 +13,29 @@ class Drivers extends BaseController {
    */
   async login(req, res) {
     try {
-      console.log(req.body);
+      const { email, password } = req.body;
 
-      return super.error(res, 401, "Invalid Password");
+      const existingUser = await getByEmail(email);
+
+      if (existingUser) {
+        const isValidPassword = verifyPassword(password, existingUser.password);
+        if (isValidPassword === true) {
+          const payload = {
+            id: existingUser.id,
+          };
+          const token = generateToken(payload);
+
+          const data = {
+            token,
+          };
+          return super.success(res, 200, "Driver login successful", data);
+        }
+        return super.error(res, 401, "Invalid Password");
+      }
+      return super.error(res, 404, "Driver not found");
     } catch (error) {
-      return super.error(res, 500, "Unable to login user");
+      console.log(error);
+      return super.error(res, 500, "Unable to login driver");
     }
   }
 
@@ -32,15 +50,12 @@ class Drivers extends BaseController {
    */
   async register(req, res) {
     try {
-      const { username, email, password, name, phone } = req.body;
+      const { email, password, name } = req.body;
 
       const hashedPassword = hashPassword(password);
       const userData = {
-        username,
         email,
-        type,
         name,
-        phone,
         password: hashedPassword,
       };
 
@@ -56,20 +71,15 @@ class Drivers extends BaseController {
           id: newUser[0].id,
         };
 
-        if (phone) {
-          const message = `Hello ${name}, thank you for registering on replate platform, it's great to have you.`;
-          sendMessage(phone, message);
-        }
-
         return super.success(
           res,
           201,
-          "User registered successfully",
+          "Driver registered successfully",
           userResponse
         );
       }
     } catch (error) {
-      return super.error(res, 500, "Unable to register user");
+      return super.error(res, 500, "Unable to register driver");
     }
   }
 }
