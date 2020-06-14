@@ -24,7 +24,6 @@ class Contributions extends BaseController {
       };
 
       const newContribution = await insertTransaction(contributionData);
-      console.log(newContribution);
       if (newContribution) {
         const contributionResponse = {
           totalContributions: newContribution.accountData.total_contributions,
@@ -55,7 +54,6 @@ class Contributions extends BaseController {
     try {
       const { user_id } = req;
       const accountDetails = await getByUserId(user_id);
-      console.log(accountDetails);
       if (accountDetails) {
         const responseData = {
           total_contributions: accountDetails.total_contributions,
@@ -68,7 +66,6 @@ class Contributions extends BaseController {
         );
       }
     } catch (error) {
-      console.log(error);
       return super.error(res, 500, "Unable to get contributions");
     }
   }
@@ -86,20 +83,21 @@ class Contributions extends BaseController {
     try {
       const { user_id } = req;
       const addWeeklyInterests = await weeklyInterests(user_id);
-      console.log(addWeeklyInterests, "==");
-      //   if (accountDetails) {
-      //     const responseData = {
-      //       total_contributions: accountDetails.total_contributions,
-      //     };
-      //     return super.success(
-      //       res,
-      //       200,
-      //       `Contributions gotten successfully`,
-      //       responseData
-      //     );
-      //   }
+
+      if (addWeeklyInterests) {
+        const responseData = {
+          total_contributions:
+            addWeeklyInterests.accountData.total_contributions,
+          interest_added: addWeeklyInterests.interest_added,
+        };
+        return super.success(
+          res,
+          200,
+          `Interest added successfully`,
+          responseData
+        );
+      }
     } catch (error) {
-      console.log(error);
       return super.error(res, 500, "Unable to get contributions");
     }
   }

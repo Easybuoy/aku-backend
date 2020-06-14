@@ -14,7 +14,7 @@ const generateToken = (payload) =>
 const calculateInterest = (amount) => {
   const { INTEREST_RATE } = process.env;
 
-  return (amount * parseFloat(INTEREST_RATE)) / 100;
+  return (parseFloat(amount) * parseFloat(INTEREST_RATE)) / 100;
 };
 
 module.exports = {

@@ -13,7 +13,6 @@ const insertTransaction = (transactionData) => {
         return db("accounts").where({ id: transactionData.user_id }).first();
       })
       .then((accoundData) => {
-        console.log(accoundData, "accd");
         return db("accounts")
           .where({ id: accoundData.user_id })
           .update({
@@ -39,6 +38,7 @@ const weeklyInterests = (user_id) => {
   return db.transaction((trx) => {
     let transactionResponseData = null;
     let currentAccountData = null;
+    let interest_added = null;
     return db("accounts")
       .where({ id: user_id })
       .first()
@@ -46,16 +46,16 @@ const weeklyInterests = (user_id) => {
       .then((response) => {
         currentAccountData = response;
         const interest = calculateInterest(response.total_contributions);
+        interest_added = interest;
         const transactionData = {
           amount: interest,
           user_id,
         };
-        db("transaction_history")
+        return db("transaction_history")
           .insert(transactionData)
           .returning("*")
           .transacting(trx)
           .then((data) => {
-            console.log(data, "data");
             transactionResponseData = data;
 
             return db("accounts")
@@ -65,13 +65,14 @@ const weeklyInterests = (user_id) => {
                   parseFloat(currentAccountData.total_contributions) +
                   parseFloat(data[0].amount),
               })
-              .transacting(trx);
+              .returning("*");
           });
       })
       .then((res) => {
         return {
           transactionData: transactionResponseData[0],
           accountData: res[0],
+          interest_added,
         };
       })
       .then(trx.commit)
