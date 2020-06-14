@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const { getById } = require("../models/users");
 
 /**
@@ -40,8 +41,9 @@ const validateToken = async (req, res, next) => {
     const data = jwt.verify(token, process.env.JWT_SECRET);
     if (data) {
       req.user_id = data.id;
-  
+
       const existingUser = await getById(req.user_id);
+
       if (!existingUser) {
         return res
           .status(404)
@@ -50,6 +52,7 @@ const validateToken = async (req, res, next) => {
       next();
     }
   } catch (error) {
+    console.log(error);
     return res
       .status(401)
       .json({ status: "error", message: "Invalid Token Provided" });

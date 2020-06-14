@@ -23,13 +23,14 @@ Router.post("/register", validateInput(validateSignupInput), register);
 // @route   GET api/v1/auth/drivers/login
 // @desc    Login Users.
 // @access  Private
-Router.post("/login", validateToken, validateInput(validateLoginInput), login);
+Router.post("/login", validateInput(validateLoginInput), login);
 
 // @route   GET api/v1/auth/drivers/assignAssociation
 // @desc    Assign Association.
 // @access  Private
 Router.post(
-  "/assignAssociation",
+  "/assignassociation",
+  validateToken,
   validateInput(validateAssignToAssociationInput),
   assignToAssociation
 );
