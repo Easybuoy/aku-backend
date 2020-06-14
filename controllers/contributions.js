@@ -1,5 +1,6 @@
 const BaseController = require("./base");
 const { insertTransaction } = require("../models/transactions");
+const { getByUserId } = require("../models/accounts");
 
 class Contributions extends BaseController {
   /**
@@ -7,7 +8,7 @@ class Contributions extends BaseController {
    * @param {object} req
    * @param {object} res
    * @returns {object} object
-   * @route POST api/v1/assocations
+   * @route POST api/v1/contributions/calculate
    * @description This function implements the logic for creating a new association.
    * @access Public
    */
@@ -36,6 +37,34 @@ class Contributions extends BaseController {
       }
     } catch (error) {
       return super.error(res, 500, "Unable to create association");
+    }
+  }
+
+  /**
+   * Create Association Route
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} object
+   * @route GET api/v1/contributions
+   * @description This function implements the logic geting a drivers contributions.
+   * @access Public
+   */
+  async getContributions(req, res) {
+    try {
+      const { user_id } = req;
+      const accountDetails = await getByUserId(user_id);
+      console.log(accountDetails);
+      if (accountDetails) {
+        return super.success(
+          res,
+          201,
+          `Contribution added successfully`,
+          accountDetails
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      return super.error(res, 500, "Unable to get contributions");
     }
   }
 }
