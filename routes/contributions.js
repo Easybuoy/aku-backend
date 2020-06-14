@@ -7,7 +7,7 @@ const { validateContributeInput } = require("../validations/contributions");
 
 const contributionsController = new ContributionsController();
 
-const { contribute, getContributions } = contributionsController;
+const { contribute, getContributions, addInterests } = contributionsController;
 
 const Router = express.Router();
 
@@ -25,5 +25,10 @@ Router.post(
 // @desc    Get all Contributions.
 // @access  Private
 Router.get("/", validateToken, getContributions);
+
+// @route   POST api/v1/contributions/
+// @desc    Get all Contributions.
+// @access  Private
+Router.get("/addInterests", validateToken, addInterests);
 
 module.exports = Router;
