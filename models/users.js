@@ -16,7 +16,6 @@ const insert = async (userData) => {
           .transacting(trx);
       })
       .then((res) => {
-        console.log(res);
         return { userData: userResponseData[0], accountData: res[0] };
       })
       .then(trx.commit)

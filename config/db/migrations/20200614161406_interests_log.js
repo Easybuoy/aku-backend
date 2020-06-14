@@ -1,7 +1,7 @@
 exports.up = (knex) =>
-  knex.schema.createTable("accounts", (tbl) => {
+  knex.schema.createTable("interests_log", (tbl) => {
     tbl.increments();
-    tbl.float("total_contributions").notNullable();
+    tbl.integer("status", 128).notNullable();
     tbl
       .integer("user_id", 128)
       .notNullable()
@@ -12,4 +12,4 @@ exports.up = (knex) =>
     tbl.timestamp("created_at").defaultTo(knex.fn.now());
   });
 
-exports.down = (knex) => knex.schema.dropTableIfExists("accounts");
+exports.down = (knex) => knex.schema.dropTableIfExists("interests_log");

@@ -3,7 +3,12 @@ const {
   insertTransaction,
   weeklyInterests,
 } = require("../models/transactions");
-const { getByUserId } = require("../models/accounts");
+const {
+  getByUserId,
+  getAccountThatHasNotBeenProcessed,
+} = require("../models/accounts");
+
+const { oneWeekAgoDate } = require("../utils");
 class Contributions extends BaseController {
   /**
    * Create Association Route
@@ -21,7 +26,7 @@ class Contributions extends BaseController {
       const contributionData = {
         amount,
         user_id: req.user_id,
-        type: 'contribution'
+        type: "contribution",
       };
 
       const newContribution = await insertTransaction(contributionData);
@@ -82,9 +87,19 @@ class Contributions extends BaseController {
    */
   async addInterests(req, res) {
     try {
-      const { user_id } = req;
-      const addWeeklyInterests = await weeklyInterests(user_id);
+      const oneweekago = oneWeekAgoDate();
 
+      const account = await getAccountThatHasNotBeenProcessed(oneweekago);
+      if (account.status === 1) {
+        return super.error(
+          res,
+          400,
+          "Interest already added for user this week"
+        );
+      }
+
+      const addWeeklyInterests = await weeklyInterests(account.user_id);
+      console.log(addWeeklyInterests, "a");
       if (addWeeklyInterests) {
         const responseData = {
           total_contributions:
@@ -94,11 +109,12 @@ class Contributions extends BaseController {
         return super.success(
           res,
           200,
-          `Interest added successfully`,
+          `Interest added successfully for user ${addWeeklyInterests.accountData.user_id}`,
           responseData
         );
       }
     } catch (error) {
+      console.log(error);
       return super.error(res, 500, "Unable to get contributions");
     }
   }

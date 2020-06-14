@@ -10,6 +10,7 @@ exports.up = (knex) =>
       .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
+    tbl.timestamp("created_at").defaultTo(knex.fn.now());
   });
 
 exports.down = (knex) => knex.schema.dropTableIfExists("transaction_history");

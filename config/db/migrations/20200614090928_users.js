@@ -11,6 +11,7 @@ exports.up = (knex) =>
       .inTable("associations")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
+    tbl.timestamp("created_at").defaultTo(knex.fn.now());
   });
 
 exports.down = (knex) => knex.schema.dropTableIfExists("users");

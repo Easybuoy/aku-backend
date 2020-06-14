@@ -26,9 +26,9 @@ Router.post(
 // @access  Private
 Router.get("/", validateToken, getContributions);
 
-// @route   POST api/v1/contributions/
-// @desc    Get all Contributions.
-// @access  Private
-Router.get("/addInterests", validateToken, addInterests);
+// @route   GET api/v1/contributions/addInterests
+// @desc    Add interests for all accounts.
+// @access  Public
+Router.get("/addInterests", addInterests);
 
 module.exports = Router;
