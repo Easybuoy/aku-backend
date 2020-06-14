@@ -1,3 +1,5 @@
+const { getById } = require("../models/users");
+
 /**
  * validateInput
  * @param {function} validationMethod
@@ -18,4 +20,40 @@ const validateInput = (validationMethod) => (req, res, next) => {
   next();
 };
 
-module.exports = { validateInput };
+/**
+ * Validate Token
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ * @returns {object} object
+ * @description This function checks if token provided is valid.
+ */
+const validateToken = async (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res
+      .status(401)
+      .json({ status: "error", message: "No Token Provided" });
+  }
+
+  try {
+    const data = jwt.verify(token, process.env.JWT_SECRET);
+    if (data) {
+      req.user_id = data.id;
+      req.type = data.type;
+      const existingUser = await getById(req.user_id);
+      if (!existingUser) {
+        return res
+          .status(404)
+          .json({ status: "error", message: "Invalid Token Provided" });
+      }
+      next();
+    }
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ status: "error", message: "Invalid Token Provided" });
+  }
+};
+
+module.exports = { validateInput, validateToken };
