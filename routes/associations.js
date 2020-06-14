@@ -1,34 +1,25 @@
 const express = require("express");
 
-const DriversController = require("../controllers/users");
+const AssociationsController = require("../controllers/associations");
 
-const { validateInput } = require("../middlewares/index");
+const { validateInput, validateToken } = require("../middlewares/index");
 const {
-  validateSignupInput,
-  validateLoginInput,
-} = require("../validations/users");
+  validateCreateAssociationInput,
+} = require("../validations/associations");
 
-// import {
-//   validateInput,
-//   validateToken,
-//   isBusiness,
-//   isVolunteer,
-// } from "../middlewares";
+const associationsController = new AssociationsController();
 
-const driversController = new DriversController();
-
-const { login, register } = driversController;
+const { createAssociation } = associationsController;
 
 const Router = express.Router();
 
-// @route   POST api/v1/drivers
-// @desc    Create new drivers
-// @access  Private
-Router.post("/register", validateInput(validateSignupInput), register);
-
-// @route   GET api/v1/auth/requests/all
-// @desc    Get all requests.
-// @access  Private
-Router.post("/login", validateInput(validateLoginInput), login);
+// @route   POST api/v1/associations
+// @desc    Create new association
+// @access  Public
+Router.post(
+  "/",
+  validateInput(validateCreateAssociationInput),
+  createAssociation
+);
 
 module.exports = Router;

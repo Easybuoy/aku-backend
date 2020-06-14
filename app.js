@@ -1,21 +1,19 @@
 const express = require("express");
 require("./config/db/db");
 
-const driversRoutes = require('./routes/users')
-
+const driversRoutes = require("./routes/users");
+const associationRoutes = require("./routes/associations");
 
 const app = express();
 
 app.use(express.json());
 
-
-
 app.get("/", (req, res) => {
   res.json({ status: "success", message: "Welcome to AKU API 👋🏾" });
 });
 
-
-app.use('/api/v1/drivers', driversRoutes)
+app.use("/api/v1/drivers", driversRoutes);
+app.use("/api/v1/associations", associationRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Route Not found");
