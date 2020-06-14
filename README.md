@@ -2,7 +2,7 @@
 
 <h3>Link to API: <a href="https://aku-test.herokuapp.com">Aku API</a> </h3>
 
-<h3>Link to API Documentation: <a href="https://documenter.getpostman.com/view/2877569/Szzhedsd">Aku API</a> </h3>
+<h3>Link to API Documentation: <a href="https://documenter.getpostman.com/view/2877569/Szzhedsd">API Documentation</a> </h3>
 
 <h2>API Routes</h2> <br>
 
