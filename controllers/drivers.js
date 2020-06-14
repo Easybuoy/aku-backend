@@ -1,6 +1,6 @@
 const BaseController = require("./base");
 
-const { insert } = require("../models/drivers");
+const { insert } = require("../models/users");
 class Drivers extends BaseController {
   /**
    * Login Route

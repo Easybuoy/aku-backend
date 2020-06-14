@@ -1,7 +1,7 @@
 const express = require("express");
 require("./config/db/db");
 
-const driversRoutes = require('./routes/drivers')
+const driversRoutes = require('./routes/users')
 
 
 const app = express();
