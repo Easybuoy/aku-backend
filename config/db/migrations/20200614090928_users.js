@@ -3,8 +3,14 @@ exports.up = (knex) =>
     tbl.increments();
     tbl.text("email", 128).notNullable().unique();
     tbl.text("name", 128).notNullable();
-    tbl.text("association_id", 128).unsigned();
     tbl.text("password", 128).notNullable();
+    tbl
+      .integer("association_id", 128)
+      .unsigned()
+      .references("id")
+      .inTable("associations")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
   });
 
 exports.down = (knex) => knex.schema.dropTableIfExists("users");
