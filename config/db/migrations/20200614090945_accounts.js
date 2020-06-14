@@ -1,6 +1,7 @@
 exports.up = (knex) =>
   knex.schema.createTable("accounts", (tbl) => {
     tbl.increments();
+    tbl.float("total_contributions").notNullable();
     tbl
       .integer("user_id", 128)
       .notNullable()
@@ -8,7 +9,6 @@ exports.up = (knex) =>
       .inTable("users")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    tbl.float("total_contributions", 128).notNullable();
   });
 
 exports.down = (knex) => knex.schema.dropTableIfExists("accounts");

@@ -1,7 +1,6 @@
 const db = require("../config/db/db");
 
 const insert = async (userData) => {
-  // db("users").insert(userData).returning("*");
   return db.transaction((trx) => {
     let userResponseData = null;
     return db("users")

@@ -36,7 +36,6 @@ class Drivers extends BaseController {
       }
       return super.error(res, 404, "Driver not found");
     } catch (error) {
-      console.log(error);
       return super.error(res, 500, "Unable to login driver");
     }
   }
@@ -68,7 +67,6 @@ class Drivers extends BaseController {
       };
 
       const newUser = await insert(userData);
-      console.log(newUser, "newuser");
       if (newUser) {
         const userResponse = {
           userId: newUser.userData.id,
@@ -85,7 +83,6 @@ class Drivers extends BaseController {
       }
       throw new Error("Unable to register driver");
     } catch (error) {
-      console.log(error);
       return super.error(res, 500, "Unable to register driver");
     }
   }
@@ -104,7 +101,6 @@ class Drivers extends BaseController {
       const { association_id } = req.body;
 
       const association = await getAssociationById(association_id);
-      console.log(association);
       if (association) {
         const userAssociation = await addUserAssociation(req.user_id, {
           association_id: association.id,
@@ -117,7 +113,6 @@ class Drivers extends BaseController {
       }
       throw new Error("Invalid association");
     } catch (error) {
-      console.log(error);
       return super.error(res, 500, "Unable to assign driver to association");
     }
   }

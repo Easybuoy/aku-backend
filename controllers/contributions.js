@@ -1,5 +1,5 @@
 const BaseController = require("./base");
-const { insertAssociation } = require("../models/associations");
+const { insertTransaction } = require("../models/transactions");
 
 class Contributions extends BaseController {
   /**
@@ -17,23 +17,23 @@ class Contributions extends BaseController {
 
       const contributionData = {
         amount,
+        user_id: req.user_id,
       };
 
-      const newUser = await insertAssociation(associationData);
+      const newContribution = await insertTransaction(contributionData);
+      console.log(newContribution);
+      if (newContribution) {
+        const contributionResponse = {
+          totalContributions: newContribution.accountData.total_contributions,
+        };
 
-    //   if (newUser.length > 0) {
-    //     const userResponse = {
-    //       name: newUser[0].name,
-    //       id: newUser[0].id,
-    //     };
-
-    //     return super.success(
-    //       res,
-    //       201,
-    //       `${name} association created successfully`,
-    //       userResponse
-    //     );
-    //   }
+        return super.success(
+          res,
+          201,
+          `Contribution added successfully`,
+          contributionResponse
+        );
+      }
     } catch (error) {
       return super.error(res, 500, "Unable to create association");
     }
