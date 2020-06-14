@@ -1,5 +1,6 @@
 const BaseController = require("./base");
-const { insert, getByEmail } = require("../models/users");
+const { insert, getByEmail, addUserAssociation } = require("../models/users");
+const { getAssociationById } = require("../models/associations");
 const { hashPassword, verifyPassword, generateToken } = require("../utils");
 class Drivers extends BaseController {
   /**
@@ -81,43 +82,34 @@ class Drivers extends BaseController {
   }
 
   /**
-   * Register Route
+   * Assign Association Route
    * @param {object} req
    * @param {object} res
    * @returns {object} object
-   * @route POST api/v1/drivers/register
-   * @description This function implements the logic for registering a new driver.
+   * @route POST api/v1/drivers/assignassociation
+   * @description This function implements the logic for assigning a driver to an association.
    * @access Public
    */
   async assignToAssociation(req, res) {
     try {
-      const { email, password, name } = req.body;
+      const { association_id } = req.body;
 
-      const hashedPassword = hashPassword(password);
-      const userData = {
-        email,
-        name,
-        password: hashedPassword,
-      };
+      const association = await getAssociationById(association_id);
+      console.log(association);
+      if (association) {
+        const userAssociation = await addUserAssociation(req.user_id, {
+          association_id: association.id,
+        });
 
-      const newUser = await insert(userData);
-
-      if (newUser.length > 0) {
-        const userResponse = {
-          email: newUser[0].email,
-          name: newUser[0].name,
-          id: newUser[0].id,
-        };
-
-        return super.success(
-          res,
-          201,
-          "Driver registered successfully",
-          userResponse
-        );
+        if (userAssociation === 1) {
+          return super.success(res, 200, "Driver assigned to association");
+        }
+        throw new Error("Unable to assign user to association");
       }
+      throw new Error("Invalid association");
     } catch (error) {
-      return super.error(res, 500, "Unable to register driver");
+      console.log(error);
+      return super.error(res, 500, "Unable to assign driver to association");
     }
   }
 }
