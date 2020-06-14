@@ -21,6 +21,7 @@ class Contributions extends BaseController {
       const contributionData = {
         amount,
         user_id: req.user_id,
+        type: 'contribution'
       };
 
       const newContribution = await insertTransaction(contributionData);

@@ -50,6 +50,7 @@ const weeklyInterests = (user_id) => {
         const transactionData = {
           amount: interest,
           user_id,
+          type: 'interest'
         };
         return db("transaction_history")
           .insert(transactionData)

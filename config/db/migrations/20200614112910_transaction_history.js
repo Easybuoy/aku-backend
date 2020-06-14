@@ -2,6 +2,7 @@ exports.up = (knex) =>
   knex.schema.createTable("transaction_history", (tbl) => {
     tbl.increments();
     tbl.float("amount", 128).notNullable();
+    tbl.text("type", 128).notNullable();
     tbl
       .integer("user_id", 128)
       .notNullable()
