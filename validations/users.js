@@ -72,7 +72,7 @@ const validateLoginInput = (input) => {
   if (!Validator.isEmail(data.email)) {
     errors.email = "Email is invalid";
   }
-  
+
   if (Validator.isEmpty(data.email)) {
     errors.email = "Email field is required";
   }
@@ -87,4 +87,25 @@ const validateLoginInput = (input) => {
   };
 };
 
-module.exports = { validateSignupInput, validateLoginInput };
+const validateAssignToAssociationInput = (input) => {
+  const errors = {};
+  const data = input;
+  data.association_id = !isEmpty(data.association_id)
+    ? data.association_id
+    : "";
+
+  if (Validator.isEmpty(data.association_id)) {
+    errors.association_id = "association_id field is required";
+  }
+
+  return {
+    errors,
+    isValid: isEmpty(errors),
+  };
+};
+
+module.exports = {
+  validateSignupInput,
+  validateLoginInput,
+  validateAssignToAssociationInput,
+};

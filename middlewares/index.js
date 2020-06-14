@@ -40,7 +40,7 @@ const validateToken = async (req, res, next) => {
     const data = jwt.verify(token, process.env.JWT_SECRET);
     if (data) {
       req.user_id = data.id;
-      req.type = data.type;
+  
       const existingUser = await getById(req.user_id);
       if (!existingUser) {
         return res
