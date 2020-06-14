@@ -7,8 +7,8 @@ class Drivers extends BaseController {
    * @param {object} req
    * @param {object} res
    * @returns {object} object
-   * @route POST api/v1/auth/login
-   * @description This function implements the logic for logging in a new user.
+   * @route POST api/v1/drivers/login
+   * @description This function implements the logic for logging in a driver.
    * @access Public
    */
   async login(req, res) {
@@ -44,8 +44,8 @@ class Drivers extends BaseController {
    * @param {object} req
    * @param {object} res
    * @returns {object} object
-   * @route POST api/v1/auth/register
-   * @description This function implements the logic for registering a new user.
+   * @route POST api/v1/drivers/register
+   * @description This function implements the logic for registering a new driver.
    * @access Public
    */
   async register(req, res) {
@@ -63,10 +63,7 @@ class Drivers extends BaseController {
 
       if (newUser.length > 0) {
         const userResponse = {
-          username: newUser[0].username,
           email: newUser[0].email,
-          type: newUser[0].type,
-          phone: newUser[0].phone,
           name: newUser[0].name,
           id: newUser[0].id,
         };
