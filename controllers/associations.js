@@ -1,5 +1,5 @@
 const BaseController = require("./base");
-const { insert, getByEmail } = require("../models/users");
+const { insert } = require("../models/associations");
 
 class Associations extends BaseController {
   /**
@@ -7,26 +7,22 @@ class Associations extends BaseController {
    * @param {object} req
    * @param {object} res
    * @returns {object} object
-   * @route POST api/v1/drivers/register
-   * @description This function implements the logic for registering a new driver.
+   * @route POST api/v1/assocations
+   * @description This function implements the logic for creating a new association.
    * @access Public
    */
   async createAssociation(req, res) {
     try {
-      const { email, password, name } = req.body;
+      const { name } = req.body;
 
-      const hashedPassword = hashPassword(password);
-      const userData = {
-        email,
+      const associationData = {
         name,
-        password: hashedPassword,
       };
 
-      const newUser = await insert(userData);
+      const newUser = await insert(associationData);
 
       if (newUser.length > 0) {
         const userResponse = {
-          email: newUser[0].email,
           name: newUser[0].name,
           id: newUser[0].id,
         };
@@ -34,12 +30,12 @@ class Associations extends BaseController {
         return super.success(
           res,
           201,
-          "Driver registered successfully",
+          `${name} association created successfully`,
           userResponse
         );
       }
     } catch (error) {
-      return super.error(res, 500, "Unable to register driver");
+      return super.error(res, 500, "Unable to create association");
     }
   }
 }
