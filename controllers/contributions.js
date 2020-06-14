@@ -55,11 +55,14 @@ class Contributions extends BaseController {
       const accountDetails = await getByUserId(user_id);
       console.log(accountDetails);
       if (accountDetails) {
+        const responseData = {
+          total_contributions: accountDetails.total_contributions,
+        };
         return super.success(
           res,
-          201,
-          `Contribution added successfully`,
-          accountDetails
+          200,
+          `Contributions gotten successfully`,
+          responseData
         );
       }
     } catch (error) {
