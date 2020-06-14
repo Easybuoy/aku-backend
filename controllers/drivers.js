@@ -1,6 +1,6 @@
 const BaseController = require("./base");
 
-class Driver extends BaseController {
+class Drivers extends BaseController {
   /**
    * Login Route
    * @param {object} req
@@ -21,4 +21,4 @@ class Driver extends BaseController {
   }
 }
 
-module.exports = Driver;
+module.exports = Drivers;

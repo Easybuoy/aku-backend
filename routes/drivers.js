@@ -1,6 +1,6 @@
 const express = require("express");
 
-const DriverController = require("../controllers/driver");
+const DriversController = require("../controllers/drivers");
 
 // import {
 //   validateRequestInput,
@@ -13,9 +13,9 @@ const DriverController = require("../controllers/driver");
 //   isVolunteer,
 // } from "../middlewares";
 
-const driverController = new DriverController();
+const driversController = new DriversController();
 
-const { login } = driverController;
+const { login } = driversController;
 
 const Router = express.Router();
 
