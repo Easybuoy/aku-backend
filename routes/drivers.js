@@ -2,10 +2,9 @@ const express = require("express");
 
 const DriversController = require("../controllers/drivers");
 
-// import {
-//   validateRequestInput,
-//   validateActionInput,
-// } from "../validations/request";
+const { validateInput } = require("../middlewares/index");
+const validateDriversInput = require("../validations/drivers");
+
 // import {
 //   validateInput,
 //   validateToken,
@@ -22,13 +21,7 @@ const Router = express.Router();
 // @route   POST api/v1/auth/requests
 // @desc    Create new request
 // @access  Private
-Router.post(
-  "/",
-  //   validateToken,
-  //   isBusiness,
-  //   validateInput(validateRequestInput),
-  login
-);
+Router.post("/", validateInput(validateDriversInput), login);
 
 // // @route   GET api/v1/auth/requests/all
 // // @desc    Get all requests.
